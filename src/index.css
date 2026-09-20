@@ -1,0 +1,70 @@
+:root {
+  color-scheme: dark;
+  --bg: #0a0a12;
+  --bg2: #10101c;
+  --panel: rgba(22, 22, 36, 0.72);
+  --panel-border: rgba(168, 85, 247, 0.22);
+  --text: #e8e8f0;
+  --muted: #9a9ab0;
+  --neon: #a855f7;
+  --cyan: #22d3ee;
+  --pink: #f472b6;
+  --accent: #22d3ee;
+  --danger: #fb7185;
+  --ok: #34d399;
+  --radius: 16px;
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  --font: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-family: var(--font);
+  line-height: 1.45;
+  font-weight: 400;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(168, 85, 247, 0.18), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(34, 211, 238, 0.12), transparent 55%),
+    radial-gradient(800px 400px at 50% 100%, rgba(244, 114, 182, 0.08), transparent 50%),
+    var(--bg);
+  min-height: 100vh;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--cyan);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
