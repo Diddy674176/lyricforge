@@ -1,0 +1,30 @@
+name: Restore LyricForge source from chunks
+on:
+  push:
+    paths:
+      - 'tools/src_restore/chunks/**'
+      - '.github/workflows/restore-chunks.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble and unpack
+        run: |
+          set -euo pipefail
+          cd tools/src_restore/chunks
+          count=$(cat COUNT.txt | tr -d '[:space:]')
+          for ((i=0; i<count; i++)); do
+            printf -v f '%03d.txt' "$i"
+            cat "$f"
+          done | tr -d '\n' | base64 -d > /tmp/lyricforge_src.tgz
+          cd ../../..
+          tar -xzf /tmp/lyricforge_src.tgz
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "chore: restore LyricForge sources from chunked bundle"
+          git push
