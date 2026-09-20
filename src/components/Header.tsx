@@ -1,18 +1,20 @@
 export function Header() {
   return (
-    <header className="lf-header">
-      <div className="lf-brand">
-        <span className="lf-logo" aria-hidden>
-          ♫
-        </span>
+    <header className="app-header">
+      <div className="brand">
+        <div className="logo-mark" aria-hidden>
+          <span />
+          <span />
+        </div>
         <div>
           <h1>LyricForge</h1>
-          <p className="lf-tagline">Paste → Analyze → Clean → Copy → Suno</p>
+          <p className="tagline">Paste → Analyze → Clean → Copy → Suno</p>
         </div>
       </div>
-      <p className="lf-disclaimer">
-        Client-side only. Paste lyrics you may use. No lyric-site scraping.
-      </p>
+      <div className="header-badges">
+        <span className="badge">Client-side</span>
+        <span className="badge badge-accent">No lyric scraping</span>
+      </div>
     </header>
   )
 }
