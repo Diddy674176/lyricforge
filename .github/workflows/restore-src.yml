@@ -1,0 +1,26 @@
+name: Restore LyricForge source bundle
+on:
+  push:
+    paths:
+      - 'tools/src_restore/**'
+      - '.github/workflows/restore-src.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unpack source bundle
+        run: |
+          set -euo pipefail
+          cd tools/src_restore
+          cat $(cat bundle.manifest) | tr -d '\n' | base64 -d > /tmp/lyricforge_src.tgz
+          cd ../..
+          tar -xzf /tmp/lyricforge_src.tgz
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "chore: restore LyricForge app sources from bundle"
+          git push
