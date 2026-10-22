@@ -8,6 +8,7 @@ import { SideBySide } from './components/SideBySide'
 import { AnalysisPanels } from './components/AnalysisPanels'
 import { MobileStickyPaste } from './components/MobileStickyPaste'
 import { ExportBar } from './components/ExportBar'
+import { PromptGenerator } from './components/PromptGenerator'
 import { processEverything } from './lib/analyze'
 import { cleanGeniusPaste } from './lib/geniusCleaner'
 import { detectStructure } from './lib/structure'
@@ -36,6 +37,12 @@ export default function App() {
     removed: string[]
   } | null>(null)
   const [histTick, setHistTick] = useState(0)
+  const [tab, setTab] = useState<'lyrics' | 'prompt'>(() =>
+    typeof location !== 'undefined' && location.hash === '#prompt' ? 'prompt' : 'lyrics',
+  )
+  useEffect(() => {
+    window.history.replaceState(null, '', tab === 'prompt' ? '#prompt' : location.pathname + location.search)
+  }, [tab])
 
   const history = useRef<string[]>([''])
   const histIndex = useRef(0)
@@ -257,6 +264,21 @@ export default function App() {
       <Header />
       {status ? <div className="global-toast">{status}</div> : null}
 
+      <nav className="tabs" role="tablist">
+        <button type="button" role="tab" aria-selected={tab === 'lyrics'} className={tab === 'lyrics' ? 'active' : ''} onClick={() => setTab('lyrics')}>Lyrics</button>
+        <button type="button" role="tab" aria-selected={tab === 'prompt'} className={tab === 'prompt' ? 'active' : ''} onClick={() => setTab('prompt')}>Prompt Generator</button>
+      </nav>
+
+      {tab === 'prompt' ? (
+        <PromptGenerator
+          lyrics={lyrics}
+          onSendToEditor={(text) => {
+            updateLyrics(text)
+            setTab('lyrics')
+            flash('Sent to editor ✓')
+          }}
+        />
+      ) : (
       <main className="app-main">
         <GeniusImport
           url={geniusUrl}
@@ -323,11 +345,14 @@ export default function App() {
         <AnalysisPanels analysis={analysis} />
         <ExportBar original={lyrics} analysis={analysis} songReference={songReference} />
       </main>
+      )}
 
-      <MobileStickyPaste
-        onPaste={() => void pasteFromClipboard(false)}
-        onPasteAndClean={() => void pasteFromClipboard(true)}
-      />
+      {tab === 'lyrics' ? (
+        <MobileStickyPaste
+          onPaste={() => void pasteFromClipboard(false)}
+          onPasteAndClean={() => void pasteFromClipboard(true)}
+        />
+      ) : null}
 
       <footer className="app-footer">
         <p>
